@@ -1,0 +1,6 @@
+B 30goto
+30goto R x
+W x
+H
+x DS
+buckchecker

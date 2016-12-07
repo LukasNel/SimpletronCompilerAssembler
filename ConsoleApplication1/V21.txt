@@ -1,0 +1,16 @@
+           R  first
+           R  second
+           I  10       
+           I  20       
+           L  first
+           S  second
+           BN printtwo
+           BZ printtwo
+           W  one   
+           H  
+printtwo   W  two 
+           H
+first      DS
+second     DS
+one        DC 1
+two        DC 2

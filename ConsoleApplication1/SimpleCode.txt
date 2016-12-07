@@ -1,0 +1,5 @@
+10 rem SHHHHHSAASASASASA
+20 goto 30
+30 input x
+40 print x
+50 end
