@@ -44,25 +44,107 @@ Command checkCompilerTokens(string fstr) {
 	else if (CASELESS_EQUAL(fstr, "goto")) { return Goto; }
 	else if (CASELESS_EQUAL(fstr, "if")) { return If; }
 	else if (CASELESS_EQUAL(fstr, "end")) { return End; }
-	/*
-	     if (!to_uppercase(fstr).compare(to_uppercase(string("rem")))) { return Remark; }
-	else if (!to_uppercase(fstr).compare(to_uppercase(string("input")))) { return Input; }
-	else if (!to_uppercase(fstr).compare(to_uppercase(string("let")))) { return Let; }
-	else if (!to_uppercase(fstr).compare(to_uppercase(string("print")))) { return Print; }
-	else if (!to_uppercase(fstr).compare(to_uppercase(string("goto")))) { return Goto; }
-	else if (!to_uppercase(fstr).compare(to_uppercase(string("if")))) { return If; }
-	else if (!to_uppercase(fstr).compare(to_uppercase(string("end")))) { return End; }
-	*/
 	return None;
 
 }
-/*
-string ProcessIfStatement() {
+int checkPrecedence(char op) {
+	switch (op) {
+	case '+':return 1; break;
+	case '-':return 1; break;
+	case '*':return 2; break;
+	case '/':return 2; break;
+	default: return 0; break;
+	}
+}
+void EvaluateString(string expression,vector<string> mem,string varName) {
+	vector<string> output;
+	stack<char> operator_stack;
+	string curVariable = "";
+	for (int i = 0; i < expression.length(); i++) {
+		if (checkPrecedence(expression[i])) {
+			output.push_back(curVariable);
+			while (!operator_stack.empty() && checkPrecedence(expression[i]) < checkPrecedence(operator_stack.top())) {
+				output.push_back(operator_stack.top());
+				operator_stack.pop();
+			}
+			operator_stack.push(expression[i]);
+		}
+		else {
+			curVariable += expression[i];
+		}
+	}
+	output.push_back(curVariable);
+	while (!operator_stack.empty()) {
+		output.push_back(operator_stack.top());
+		operator_stack.pop();
+	}
+	if (StringIsNum(output[0])) {
+		InsertSymbol(fsymtable, atoi(output[0]), 'C', -1, symbol_counter);
+		mem.push_back(string("L ") + output[0]);
+	}
+	else {
+		InsertSymbol(fsymtable, output[0][0], 'V', -1, symbol_counter);
+		mem.push_back(string("L ") + output[0][0]);
+	}
+
+	for (int i = 1; i < output.size(); i += 2) {
+		curVariable = "";
+		switch(output[i+1][0]){
+		case '+':curVariable += "A "; break;
+		case '-':curVariable += "S "; break;
+		case '*':curVariable += "M "; break;
+		case '/':curVariable += "D "; break;
+		default:cerr << "Operator Used Incorrectly" << endl;
+		}
+		curVariable += output[i][0];
+		if (StringIsNum(output[i])) {
+			InsertSymbol(fsymtable, atoi(output[0]), 'C', -1, symbol_counter);
+		}
+		else {
+			InsertSymbol(fsymtable, output[0][0], 'V', -1, symbol_counter);
+		}
+		mem.push_back(curVariable);
+	}
+	mem.push_back(string("ST ") + varName);
+	return varName;
+}
+string ProcessIfStatement(vector<string> tokens) {
 	string output = "";
 	string checkStatement = "";
-	for (int i = 2; i < tokens.size && !to_uppercase(fstr).compare(to_uppercase(string("goto"))) ;)
+	vector<string> expressionList;
+	expressionList.push_back("");
+	short ExpressionNumber = 0;
+	for (int i = 2; i < tokens.size && !CASELESS_EQUAL(tokens[i], "goto"); i++) {
+		if (CASELESS_EQUAL(tokens[i], "goto")) {
+			
+		}
+		checkStatement += tokens[i];
+	}
+	for (int i = 0; i < checkStatement.length(); i++) {
+		switch (ExpressionNumber) {
+			case 0:
+				if (checkStatement[i] == '=' || checkStatement[i] == '<' || checkStatement[i] == '>') { 
+					ExpressionNumber = 1; 
+					expressionList.push_back("");
+				}
+			break;
+			case 1:
+				if (!(checkStatement[i] == '=' || checkStatement[i] == '<' || checkStatement[i] == '>')) {
+					ExpressionNumber = 2;
+					expressionList.push_back("");
+				}
+			break;
+		}
+		expressionList[ExpressionNumber] += checkStatement[i];
+	}
+	if (expressionList.size() < 3) {
+		cerr << "missing a expression" << endl;
+		return;
+	}
+	mem.push	
+
 }
-*/
+
 string SimpletronCompiler(const char* filename) {
 	ifstream filereader(filename);
 	string line = "";
@@ -173,7 +255,13 @@ string SimpletronCompiler(const char* filename) {
 				tStr += "DS";
 				mem.push_back(tStr);
 				break;
-			case 'C':break;
+			case 'C':
+				tStr =  to_string(symboltable[i].symbol);
+				tStr += " ";
+				tStr += "DC ";
+				tStr += to_string(symboltable[i].symbol);
+				mem.push_back(tStr);
+				break;
 			default:break;
 			}
 		}
