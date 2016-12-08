@@ -105,18 +105,35 @@ string SimpletronAssembler(const char* filename) {
 			tokens.erase(std::remove(tokens.begin(), tokens.end(), ""), tokens.end());
 
 			int tempNum = checkToken(tokens[0]);
-			if (tokens.size() > 1 && !tokens[0].compare("I"))data[ndata++] = atoi(tokens[1].c_str());
-			else if (!tempNum) StorageCustomTokenInsertion(mem, instruction_counter, tokens, symboltable, symboltable_counter, flags, 0);
-			else StandardTokenInsertion(mem, instruction_counter, tokens, tempNum, symboltable, symboltable_counter, flags, 1);
+			if (tokens.size() > 1 && !tokens[0].compare("I"))
+				data[ndata++] = atoi(tokens[1].c_str());
+			else if (!tempNum) 
+			        StorageCustomTokenInsertion(mem, instruction_counter, tokens, symboltable, symboltable_counter, flags, 0);
+			else 
+				StandardTokenInsertion(mem, instruction_counter, tokens, tempNum, symboltable, symboltable_counter, flags, 1);
 		}
-		for (int i = 0; i < instruction_counter; i++)if (flags[i] != -1)mem[i] += symboltable[flags[i]].location;
+		
+		for (int i = 0; i < instruction_counter; i++) {
+			if (flags[i] != -1)
+				mem[i] += symboltable[flags[i]].location;
+		}
+		
 		mem[instruction_counter++] = -999999;
-		for (int i = 0; i < ndata; i++) mem[instruction_counter++] = data[i];
+		
+		for (int i = 0; i < ndata; i++) {
+			mem[instruction_counter++] = data[i];
+		}
+		
 		filereader.close();
 	}
+	
 	line = "siml_";
 	ofstream fileout(line + filename);
-	for (int i = 0; i < instruction_counter; i++) output += to_string(mem[i]) + "\n";
+
+	for (int i = 0; i < instruction_counter; i++)  {
+		output += to_string(mem[i]) + "\n";
+	}
+
 
 	fileout << output << "buckchecker";
 	fileout.close();
