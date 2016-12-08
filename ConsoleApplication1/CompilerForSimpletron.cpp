@@ -56,11 +56,13 @@ Command checkCompilerTokens(string fstr) {
 	return None;
 
 }
+/*
 string ProcessIfStatement() {
 	string output = "";
 	string checkStatement = "";
 	for (int i = 2; i < tokens.size && !to_uppercase(fstr).compare(to_uppercase(string("goto"))) ;)
 }
+*/
 string SimpletronCompiler(const char* filename) {
 	ifstream filereader(filename);
 	string line = "";

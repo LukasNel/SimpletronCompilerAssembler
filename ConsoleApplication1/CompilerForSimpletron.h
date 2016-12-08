@@ -7,7 +7,7 @@
 #include <vector>
 #include <sstream>
 using namespace std;
-#CASELESS_EQUAL(a, b) ((!to_uppercase(a).compare(to_uppercase(string(b)))) ? 1 : 0)
+#define CASELESS_EQUAL(a, b) ((!to_uppercase(a).compare(to_uppercase(string(b)))) ? 1 : 0)
 enum Command : int {
 	None,
 	Remark,
