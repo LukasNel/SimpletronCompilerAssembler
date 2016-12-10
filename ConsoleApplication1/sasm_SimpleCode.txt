@@ -1,6 +1,35 @@
 B 30goto
 30goto R x
-W x
+L 1
+ST ?
+L 1
+ST !
+L ?
+S !
+BZ 40goto
+40goto W x
+L 2
+ST `
+L `
+ST x
+L 2
+A 2
+ST `
+L `
+ST b
+L x
+A 2
+ST `
+L `
+ST b
+W b
 H
 x DS
+1 DC 1
+? DS
+! DS
+2 DC 2
+` DS
+b DS
+0 DC 0
 buckchecker

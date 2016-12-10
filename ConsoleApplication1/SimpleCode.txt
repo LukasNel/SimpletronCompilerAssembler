@@ -1,5 +1,10 @@
 10 rem SHHHHHSAASASASASA
 20 goto 30
 30 input x
+60 if 1 == 1 goto 40
 40 print x
+70 let x = 2
+80 let b = 2+2
+100 let b = x+2
+110 print b
 50 end

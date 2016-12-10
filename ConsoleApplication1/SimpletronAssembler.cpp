@@ -103,7 +103,7 @@ string SimpletronAssembler(const char* filename) {
 		while (getline(filereader, line)) {
 			vector<string> tokens = split(line, ' ');
 			tokens.erase(std::remove(tokens.begin(), tokens.end(), ""), tokens.end());
-
+			if (tokens.empty())continue;
 			int tempNum = checkToken(tokens[0]);
 			if (tokens.size() > 1 && !tokens[0].compare("I"))
 				data[ndata++] = atoi(tokens[1].c_str());
